@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "name": "Meine Erweiterung",
+    "version": "1.0",
+    "description": "Eine Beispiel-Erweiterung",
+    "permissions": ["storage", "tabs", "activeTab", "scripting"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup/popup.html",
+      "default_icon": {
+        "16": "icon.jpeg",
+        "48": "icon.jpeg",
+        "128": "icon.jpeg"
+      }
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ]
+  }
