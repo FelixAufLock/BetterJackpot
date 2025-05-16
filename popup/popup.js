@@ -8,13 +8,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const tabId = tabs[0].id;
+      const tab = tabs[0];
+      const url = tab.url;
+
+      // Prüfen, ob "jackot" in der URL vorkommt
+      if (!url.includes('jackpot')) {
+        balanceDisplay.textContent = `Fehler: Diese Seite wird nicht unterstützt (${url})`;
+        return;
+      }
 
       chrome.scripting.executeScript({
-        target: { tabId },
+        target: { tabId: tab.id },
         files: ['content.js']
       }, () => {
-        chrome.tabs.sendMessage(tabId, { type: "GET_BALANCE" }, (response) => {
+        chrome.tabs.sendMessage(tab.id, { type: "GET_BALANCE" }, (response) => {
           if (chrome.runtime.lastError) {
             console.error("Fehler:", chrome.runtime.lastError.message);
             balanceDisplay.textContent = 'Fehler: Content-Skript nicht gefunden.';
@@ -31,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  setInterval(fetchBalance, 750); //read balance every 0,75 seconds
-  fetchBalance(); // initial fetch
+  // Alle 1 Sekunde abrufen
+  setInterval(fetchBalance, 1000);
+  fetchBalance(); // initial call
 });

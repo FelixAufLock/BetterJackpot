@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Kontostand</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body { font-family: sans-serif; padding: 10px; width: 220px; }
     button { width: 100%; padding: 8px; margin-bottom: 10px; }
@@ -10,7 +11,42 @@
   </style>
 </head>
 <body>
-  <div id="balanceDisplay">Noch kein Kontostand geladen.</div>
+  <div id="balanceContainer">
+    <span id="balanceDisplay">kein Kontostand geladen.</span> 
+  </div>
+
+  <div class="switch-container"> 
+    <span>Pack Collector:</span>
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="switch-container"> 
+    <span>Cards Collector:</span>
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="switch-container"> 
+    <span>Automatic Hamsterrad:</span>
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="switch-container"> 
+    <span>Automatic Jackpot:</span>
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
   <script src="popup.js"></script>
 </body>
 </html>
