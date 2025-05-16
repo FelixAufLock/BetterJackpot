@@ -2,28 +2,15 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Popup</title>
+  <title>Kontostand</title>
   <style>
-    body {
-      min-width: 200px;
-      font-family: sans-serif;
-      padding: 10px;
-    }
-    button {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-    }
-    #titleDisplay {
-      font-size: 14px;
-      color: #333;
-      word-break: break-word;
-    }
+    body { font-family: sans-serif; padding: 10px; width: 220px; }
+    button { width: 100%; padding: 8px; margin-bottom: 10px; }
+    #balanceDisplay { font-weight: bold; color: #222; }
   </style>
 </head>
 <body>
-  <button id="getTitleBtn">Titel anzeigen</button>
-  <div id="titleDisplay">Titel wird hier angezeigt...</div>
+  <div id="balanceDisplay">Noch kein Kontostand geladen.</div>
   <script src="popup.js"></script>
 </body>
 </html>

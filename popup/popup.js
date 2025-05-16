@@ -1,19 +1,36 @@
-document.getElementById("getTitleBtn").addEventListener("click", async () => {
-  const titleDisplay = document.getElementById("titleDisplay");
+document.addEventListener('DOMContentLoaded', () => {
+  const balanceDisplay = document.getElementById('balanceDisplay');
 
-  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    files: ["content.js"]
-  }, () => {
-    chrome.tabs.sendMessage(tab.id, { type: "GET_TITLE" }, (response) => {
-      if (chrome.runtime.lastError || !response) {
-        titleDisplay.textContent = "Fehler beim Abrufen des Titels.";
-        console.error(chrome.runtime.lastError?.message);
-      } else {
-        titleDisplay.textContent = `Titel: ${response.title}`;
+  function fetchBalance() {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs.length === 0) {
+        balanceDisplay.textContent = 'Kein aktiver Tab gefunden.';
+        return;
       }
+
+      const tabId = tabs[0].id;
+
+      chrome.scripting.executeScript({
+        target: { tabId },
+        files: ['content.js']
+      }, () => {
+        chrome.tabs.sendMessage(tabId, { type: "GET_BALANCE" }, (response) => {
+          if (chrome.runtime.lastError) {
+            console.error("Fehler:", chrome.runtime.lastError.message);
+            balanceDisplay.textContent = 'Fehler: Content-Skript nicht gefunden.';
+            return;
+          }
+
+          if (response && response.balance) {
+            balanceDisplay.textContent = `Ihr Kontostand: ${response.balance}`;
+          } else {
+            balanceDisplay.textContent = 'Fehler beim Abrufen des Kontostands.';
+          }
+        });
+      });
     });
-  });
+  }
+
+  setInterval(fetchBalance, 750); //read balance every 0,75 seconds
+  fetchBalance(); // initial fetch
 });

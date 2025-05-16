@@ -1,24 +1,23 @@
 {
-    "manifest_version": 3,
-    "name": "Meine Erweiterung",
-    "version": "1.0",
-    "description": "Eine Beispiel-Erweiterung",
-    "permissions": ["storage", "tabs", "activeTab", "scripting"],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "action": {
-      "default_popup": "popup/popup.html",
-      "default_icon": {
-        "16": "icon.jpeg",
-        "48": "icon.jpeg",
-        "128": "icon.jpeg"
-      }
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ]
-  }
+  "manifest_version": 3,
+  "name": "BetterJackpot",
+  "version": "1.0",
+  "description": "A Chrome extension for a better Jackpot.de experience.",
+  "permissions": ["tabs", "activeTab", "scripting"],
+  "host_permissions": ["https://jackpot.de/*"], 
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icon.jpeg"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://jackpot.de/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
