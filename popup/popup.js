@@ -1,40 +1,102 @@
+const storage = browser.storage
+
 document.addEventListener('DOMContentLoaded', () => {
-  const balanceDisplay = document.getElementById('balanceDisplay');
+    const balanceDisplay = document.getElementById('balanceDisplay')
+    const checkbox = document.getElementById('autoclickerToggle')
+    const clickCountElem = document.getElementById('clickCount')
 
-  function fetchBalance() {
+    initBalanceUpdater(balanceDisplay)
+    initAutoclickerToggle(checkbox)
+    initClickCounterDisplay(clickCountElem)
+})
+
+/**
+ * Initialisiert das regelmäßige Abrufen des Kontostands.
+ */
+function initBalanceUpdater(displayElem) {
+    function fetchBalance() {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs.length === 0) {
+                displayElem.textContent = 'Kein aktiver Tab gefunden.'
+                return
+            }
+
+            const tab = tabs[0]
+            const url = tab.url
+
+            // Prüfen, ob "jackpot" in der URL vorkommt
+            if (!url.includes('jackpot')) {
+                displayElem.textContent = `Fehler: Diese Seite wird nicht unterstützt (${url})`
+                return
+            }
+
+            chrome.tabs.sendMessage(
+                tab.id,
+                { type: 'GET_BALANCE' },
+                (response) => {
+                    if (chrome.runtime.lastError) {
+                        displayElem.textContent =
+                            'Fehler: Content-Skript nicht gefunden.'
+                        return
+                    }
+
+                    if (response && response.balance) {
+                        displayElem.textContent = `Kontostand: ${response.balance}`
+                    } else {
+                        displayElem.textContent =
+                            'Fehler beim Abrufen des Kontostands.'
+                    }
+                }
+            )
+        })
+    }
+
+    fetchBalance() // initialer Abruf
+    setInterval(fetchBalance, 1000) // alle 1 Sekunde
+}
+
+/**
+ * Initialisiert die Checkbox zur Steuerung des Autoklickers.
+ */
+function initAutoclickerToggle(checkboxElem) {
+    // Zustand laden und an aktiven Tab senden
+    storage.local.get(['autoclickerEnabled'], (result) => {
+        const enabled = result.autoclickerEnabled ?? false
+        checkboxElem.checked = enabled
+        toggleAutoclickerInActiveTab(enabled)
+    })
+
+    // Bei Änderung speichern und an aktiven Tab senden
+    checkboxElem.addEventListener('change', () => {
+        const enabled = checkboxElem.checked
+        storage.local.set({ autoclickerEnabled: enabled })
+        toggleAutoclickerInActiveTab(enabled)
+    })
+}
+
+/**
+ * Initialisiert die Anzeige des Klickzählers.
+ */
+function initClickCounterDisplay(displayElem) {
+    function updateCounter() {
+        storage.local.get(['clickCount'], (result) => {
+            displayElem.textContent = result.clickCount ?? 0
+        })
+    }
+
+    updateCounter() // initial anzeigen
+    setInterval(updateCounter, 1000) // regelmäßig aktualisieren
+}
+
+/**
+ * Sendet eine Nachricht an den aktiven Tab, um den Autoklicker ein- oder auszuschalten.
+ */
+function toggleAutoclickerInActiveTab(enabled) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs.length === 0) {
-        balanceDisplay.textContent = 'Kein aktiver Tab gefunden.';
-        return;
-      }
-
-      const tab = tabs[0];
-      const url = tab.url;
-
-      // Prüfen, ob "jackpot" in der URL vorkommt (ich habe 'jackot' auf 'jackpot' korrigiert)
-      if (!url.includes('jackpot')) {
-        balanceDisplay.textContent = `Fehler: Diese Seite wird nicht unterstützt (${url})`;
-        return;
-      }
-
-      // KEIN chrome.scripting.executeScript() - Content Script wird automatisch geladen
-      chrome.tabs.sendMessage(tab.id, { type: 'GET_BALANCE' }, (response) => {
-        if (chrome.runtime.lastError) {
-          console.error('Fehler:', chrome.runtime.lastError.message);
-          balanceDisplay.textContent = 'Fehler: Content-Skript nicht gefunden.';
-          return;
-        }
-
-        if (response && response.balance) {
-          balanceDisplay.textContent = `Ihr Kontostand: ${response.balance}`;
-        } else {
-          balanceDisplay.textContent = 'Fehler beim Abrufen des Kontostands.';
-        }
-      });
-    });
-  }
-
-  // Alle 1 Sekunde abrufen
-  setInterval(fetchBalance, 1000);
-  fetchBalance(); // initial call
-});
+        if (tabs.length === 0) return
+        chrome.tabs.sendMessage(tabs[0].id, {
+            type: 'SET_AUTOCLICKER',
+            enabled,
+        })
+    })
+}

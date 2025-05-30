@@ -1,63 +1,37 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Kontostand</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-      body {
-        font-family: sans-serif;
-        padding: 10px;
-        width: 220px;
-      }
-      button {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 10px;
-      }
-      #balanceDisplay {
-        font-weight: bold;
-        color: #222;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="balanceContainer">
-      <span id="balanceDisplay">kein Kontostand geladen.</span>
-    </div>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Kontostand</title>
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 10px;
+                width: 300;
+            }
+            button {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+            }
+            #balanceDisplay {
+                font-weight: bold;
+                color: #222;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="balanceContainer">
+            <span id="balanceDisplay">kein Kontostand geladen.</span>
+        </div>
+        <br />
+        <label>
+            <input type="checkbox" id="autoclickerToggle" />
+            Sticker automatisch öffnen
+        </label>
 
-    <div class="switch-container">
-      <span>Pack Collector:</span>
-      <label class="switch">
-        <input type="checkbox" />
-        <span class="slider round"></span>
-      </label>
-    </div>
-
-    <div class="switch-container">
-      <span>Cards Collector:</span>
-      <label class="switch">
-        <input type="checkbox" />
-        <span class="slider round"></span>
-      </label>
-    </div>
-
-    <div class="switch-container">
-      <span>Automatic Hamsterrad:</span>
-      <label class="switch">
-        <input type="checkbox" />
-        <span class="slider round"></span>
-      </label>
-    </div>
-
-    <div class="switch-container">
-      <span>Automatic Jackpot:</span>
-      <label class="switch">
-        <input type="checkbox" />
-        <span class="slider round"></span>
-      </label>
-    </div>
-
-    <script src="popup.js"></script>
-  </body>
+        <div>Packs automatisch geöffnet: <span id="clickCount">0</span></div>
+        <script src="popup.js"></script>
+    </body>
 </html>
