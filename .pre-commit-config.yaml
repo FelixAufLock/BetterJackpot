@@ -1,0 +1,7 @@
+repos:
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8  # oder die aktuellste Version
+    hooks:
+      - id: prettier
+        additional_dependencies: ['prettier@3.2.5']
+        files: '\.(js|ts|json|css|html)$'
