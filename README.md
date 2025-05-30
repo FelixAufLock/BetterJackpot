@@ -5,7 +5,8 @@ Verbessere deine Jackpot.de-Erfahrung mit Autoklicker und so
 ## 🚀 Funktionen
 
 - 💸 Anzeige des Kontostandes (schon geil)
-- 🚨 Sticker Sets werden automatisch geöffnet (hammer geil)
+- 🚨 Sticker-Päckchen werden automatisch geöffnet (sehr geil)
+- 🤫 jackpot.de ist immer ruhig (kein Stress)
 
 ## 🧑‍💻 Installation
 
