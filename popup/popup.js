@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // KEIN chrome.scripting.executeScript() - Content Script wird automatisch geladen
-      chrome.tabs.sendMessage(tab.id, { type: "GET_BALANCE" }, (response) => {
+      chrome.tabs.sendMessage(tab.id, { type: 'GET_BALANCE' }, (response) => {
         if (chrome.runtime.lastError) {
-          console.error("Fehler:", chrome.runtime.lastError.message);
+          console.error('Fehler:', chrome.runtime.lastError.message);
           balanceDisplay.textContent = 'Fehler: Content-Skript nicht gefunden.';
           return;
         }
