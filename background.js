@@ -1,18 +1,32 @@
 const storage = browser.storage
 
 // Beim Installieren der Erweiterung
-chrome.runtime.onInstalled.addListener(() => {
-    // Setze Standardwert nur, wenn noch nicht vorhanden
-    storage.local.get(['autoclickerEnabled'], (result) => {
+browser.runtime.onInstalled.addListener(() => {
+    storage.local.get(['autoclickerEnabled']).then((result) => {
         if (typeof result.autoclickerEnabled === 'undefined') {
             storage.local.set({ autoclickerEnabled: true })
         }
     })
 })
 
-// Wenn ein Tab aktualisiert wird (z. B. neu lädt)
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete' && tab.url?.includes('jackpot.de')) {
-        chrome.tabs.update(tabId, { muted: true })
+// Wenn ein Tab aktualisiert wurde
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (!changeInfo.status === 'complete') return
+    if (tab.url?.includes('jackpot.de')) {
+        // Tab muten
+        browser.tabs.update(tabId, { muted: true })
+        // updateBadge(tabId, true)
+    } else {
+        // updateBadge(tabId, false)
     }
 })
+
+function updateBadge(tabId, showBadge) {
+    // maybe use different icons instead of badge
+    if (showBadge) {
+        browser.action.setBadgeText({ tabId, text: '.' })
+        browser.action.setBadgeBackgroundColor({ tabId, color: '#00cc00' }) // grün
+    } else if (changeInfo.status === 'complete') {
+        browser.action.setBadgeText({ tabId, text: '' })
+    }
+}

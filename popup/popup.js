@@ -9,50 +9,43 @@ document.addEventListener('DOMContentLoaded', () => {
     initAutoclickerToggle(checkbox)
     initClickCounterDisplay(clickCountElem)
 })
-
 /**
  * Initialisiert das regelmäßige Abrufen des Kontostands.
  */
 function initBalanceUpdater(displayElem) {
-    function fetchBalance() {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (tabs.length === 0) {
-                displayElem.textContent = 'Kein aktiver Tab gefunden.'
-                return
-            }
+    fetchBalance(displayElem) // initialer Abruf
+    setInterval(() => fetchBalance(displayElem), 1000) // alle 1 Sekunde
+}
 
-            const tab = tabs[0]
-            const url = tab.url
+function fetchBalance(displayElem) {
+    browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs.length === 0) {
+            displayElem.textContent = 'Kein aktiver Tab gefunden.'
+            return
+        }
 
-            // Prüfen, ob "jackpot" in der URL vorkommt
-            if (!url.includes('jackpot')) {
-                displayElem.textContent = `Fehler: Diese Seite wird nicht unterstützt (${url})`
-                return
-            }
+        const tab = tabs[0]
+        // const url = tab.url
 
-            chrome.tabs.sendMessage(
-                tab.id,
-                { type: 'GET_BALANCE' },
-                (response) => {
-                    if (chrome.runtime.lastError) {
-                        displayElem.textContent =
-                            'Fehler: Content-Skript nicht gefunden.'
-                        return
-                    }
+        // Prüfen, ob "jackpot" in der URL vorkommt
+        /*         if (!url.includes('jackpot')) {
+            displayElem.textContent = `Fehler: Diese Seite wird nicht unterstützt (${url})`
+            return
+        } */
 
-                    if (response && response.balance) {
-                        displayElem.textContent = `Kontostand: ${response.balance}`
-                    } else {
-                        displayElem.textContent =
-                            'Fehler beim Abrufen des Kontostands.'
-                    }
+        browser.tabs.sendMessage(
+            tab.id,
+            { type: 'GET_BALANCE' },
+            (response) => {
+                if (response && response.balance) {
+                    displayElem.textContent = `Kontostand: ${response.balance}`
+                } else {
+                    displayElem.textContent =
+                        'Fehler beim Abrufen des Kontostands.'
                 }
-            )
-        })
-    }
-
-    fetchBalance() // initialer Abruf
-    setInterval(fetchBalance, 1000) // alle 1 Sekunde
+            }
+        )
+    })
 }
 
 /**
@@ -92,11 +85,44 @@ function initClickCounterDisplay(displayElem) {
  * Sendet eine Nachricht an den aktiven Tab, um den Autoklicker ein- oder auszuschalten.
  */
 function toggleAutoclickerInActiveTab(enabled) {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length === 0) return
-        chrome.tabs.sendMessage(tabs[0].id, {
+        browser.tabs.sendMessage(tabs[0].id, {
             type: 'SET_AUTOCLICKER',
             enabled,
         })
+    })
+}
+
+const extensionToggle = document.getElementById('extensionToggle')
+
+// Zustand laden
+browser.storage.local.get(['extensionEnabled'], (result) => {
+    extensionToggle.checked = result.extensionEnabled ?? true
+    updateBadge(extensionToggle.checked)
+})
+
+// Wenn Checkbox geändert wird
+extensionToggle.addEventListener('change', () => {
+    const enabled = extensionToggle.checked
+    browser.storage.local.set({ extensionEnabled: enabled })
+    updateBadge(enabled)
+
+    // Nachricht an aktiven Tab (falls du dort auch was deaktivieren willst)
+    browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs.length === 0) return
+        browser.tabs.sendMessage(tabs[0].id, {
+            type: 'SET_EXTENSION_ENABLED',
+            enabled,
+        })
+    })
+})
+
+// Badge aktualisieren (optional)
+function updateBadge(enabled) {
+    const text = enabled ? 'o' : ''
+    browser.action.setBadgeText({ text })
+    browser.action.setBadgeBackgroundColor({
+        color: enabled ? '#00cc00' : 'transparent',
     })
 }
