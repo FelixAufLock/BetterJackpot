@@ -93,36 +93,3 @@ function toggleAutoclickerInActiveTab(enabled) {
         })
     })
 }
-
-const extensionToggle = document.getElementById('extensionToggle')
-
-// Zustand laden
-browser.storage.local.get(['extensionEnabled'], (result) => {
-    extensionToggle.checked = result.extensionEnabled ?? true
-    updateBadge(extensionToggle.checked)
-})
-
-// Wenn Checkbox geändert wird
-extensionToggle.addEventListener('change', () => {
-    const enabled = extensionToggle.checked
-    browser.storage.local.set({ extensionEnabled: enabled })
-    updateBadge(enabled)
-
-    // Nachricht an aktiven Tab (falls du dort auch was deaktivieren willst)
-    browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs.length === 0) return
-        browser.tabs.sendMessage(tabs[0].id, {
-            type: 'SET_EXTENSION_ENABLED',
-            enabled,
-        })
-    })
-})
-
-// Badge aktualisieren (optional)
-function updateBadge(enabled) {
-    const text = enabled ? 'o' : ''
-    browser.action.setBadgeText({ text })
-    browser.action.setBadgeBackgroundColor({
-        color: enabled ? '#00cc00' : 'transparent',
-    })
-}

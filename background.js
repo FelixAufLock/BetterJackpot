@@ -26,7 +26,7 @@ function updateBadge(tabId, showBadge) {
     if (showBadge) {
         browser.action.setBadgeText({ tabId, text: '.' })
         browser.action.setBadgeBackgroundColor({ tabId, color: '#00cc00' }) // grün
-    } else if (changeInfo.status === 'complete') {
+    } else {
         browser.action.setBadgeText({ tabId, text: '' })
     }
 }
