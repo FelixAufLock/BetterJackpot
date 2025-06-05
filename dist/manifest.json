@@ -5,7 +5,7 @@
     "description": "A browser extension for a better Jackpot.de experience.",
     "permissions": ["tabs", "scripting", "activeTab", "storage"],
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["assets/background.js"]
     },
     "browser_specific_settings": {
         "gecko": {
@@ -16,11 +16,11 @@
     "content_scripts": [
         {
             "matches": ["*://*/*"],
-            "js": ["content.js"]
+            "js": ["assets/content.js"]
         }
     ],
     "action": {
-        "default_popup": "popup/popup.html",
+        "default_popup": "src/popup/popup.html",
         "default_icon": {
             "16": "icon.jpeg",
             "32": "icon.jpeg",

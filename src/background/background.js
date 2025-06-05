@@ -2,9 +2,9 @@ const storage = browser.storage
 
 // Beim Installieren der Erweiterung
 browser.runtime.onInstalled.addListener(() => {
-    storage.local.get(['autoclickerEnabled']).then((result) => {
-        if (typeof result.autoclickerEnabled === 'undefined') {
-            storage.local.set({ autoclickerEnabled: true })
+    storage.local.get(['openPacksEnabled']).then((result) => {
+        if (typeof result.openPacksEnabled === 'undefined') {
+            storage.local.set({ openPacksEnabled: true })
         }
     })
 })

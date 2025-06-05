@@ -1,0 +1,24 @@
+{
+    "name": "betterjackpot",
+    "version": "1.0.0",
+    "description": "Verbessere deine Jackpot.de-Erfahrung mit Autoklicker und so",
+    "main": "content.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/FelixAufLock/BetterJackpot.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/FelixAufLock/BetterJackpot/issues"
+    },
+    "homepage": "https://github.com/FelixAufLock/BetterJackpot#readme",
+    "devDependencies": {
+        "vite": "^6.3.5"
+    }
+}

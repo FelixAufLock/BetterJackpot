@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "BetterJackpot",
+    "version": "1.0",
+    "description": "A browser extension for a better Jackpot.de experience.",
+    "permissions": ["tabs", "scripting", "activeTab", "storage"],
+    "background": {
+        "scripts": ["assets/background.js"]
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "betterjackpot@example.com",
+            "strict_min_version": "109.0"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": ["assets/content.js"]
+        }
+    ],
+    "action": {
+        "default_popup": "src/popup/popup.html",
+        "default_icon": {
+            "16": "icon.jpeg",
+            "32": "icon.jpeg",
+            "48": "icon.jpeg"
+        }
+    }
+}
