@@ -2,10 +2,18 @@ const storage = browser.storage
 
 let isMuteTabsListenerActive = false
 
+function isJackpotTab(tab) {
+    return tab.url?.includes('jackpot.de')
+}
+
+function muteTab(tabId) {
+    browser.tabs.update(tabId, { muted: true })
+}
+
 function muteJackpotTabs(tabId, changeInfo, tab) {
     if (changeInfo.status !== 'complete') return
-    if (tab.url?.includes('jackpot.de')) {
-        browser.tabs.update(tabId, { muted: true })
+    if (isJackpotTab(tab)) {
+        muteTab(tabId)
     }
 }
 
@@ -14,6 +22,15 @@ function enableMuteTabsListener() {
         browser.tabs.onUpdated.addListener(muteJackpotTabs)
         isMuteTabsListenerActive = true
         console.log('MuteTabs aktiviert')
+
+        // mute tabs when enabling muteTabsEnabled without reloading existing tabs
+        browser.tabs.query({}).then((tabs) => {
+            for (const tab of tabs) {
+                if (isJackpotTab(tab)) {
+                    muteTab(tab.id)
+                }
+            }
+        })
     }
 }
 
