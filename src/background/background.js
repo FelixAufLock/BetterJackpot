@@ -1,26 +1,9 @@
-const storage = browser.storage
+import './install.js'
+import { initMuteTabs } from './muteTabs.js'
 
-// Beim Installieren der Erweiterung
-browser.runtime.onInstalled.addListener(() => {
-    storage.local.get(['openPacksEnabled']).then((result) => {
-        if (typeof result.openPacksEnabled === 'undefined') {
-            storage.local.set({ openPacksEnabled: true })
-        }
-    })
-})
+initMuteTabs()
 
-// Wenn ein Tab aktualisiert wurde
-browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (!changeInfo.status === 'complete') return
-    if (tab.url?.includes('jackpot.de')) {
-        // Tab muten
-        browser.tabs.update(tabId, { muted: true })
-        // updateBadge(tabId, true)
-    } else {
-        // updateBadge(tabId, false)
-    }
-})
-
+// not used, just prepared
 function updateBadge(tabId, showBadge) {
     // maybe use different icons instead of badge
     if (showBadge) {

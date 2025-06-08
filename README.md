@@ -11,7 +11,11 @@ Verbessere deine Jackpot.de-Erfahrung mit Autoklicker und so
 ## 🧑‍💻 Installation
 
 - Firefox: 
-    - temporär: about:debugging#/runtime/this-firefox öffnen, dort "Temporäres Add-On laden..."
+    - temporär: 
+        - 'npx vite build' 
+        - 'about:debugging#/runtime/this-firefox'
+        - "Temporäres Add-On laden..."
+        - dist/manifest.json
     - signiert: t.b.d.
 - Chrome:
     - t.b.d.

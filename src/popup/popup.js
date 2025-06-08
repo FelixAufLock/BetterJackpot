@@ -1,18 +1,28 @@
 const storage = browser.storage
 
 document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('toggleOpenPacks')
+    const toggleOpenPacks = document.getElementById('toggleOpenPacks')
+    const toggleMuteTabs = document.getElementById('toggleMuteTabs')
     const countElem = document.getElementById('countOpenPacks')
 
     storage.local.get(['openPacksEnabled', 'openPacksClickCount'], (result) => {
-        toggle.checked = result.openPacksEnabled ?? false
+        toggleOpenPacks.checked = result.openPacksEnabled ?? false
         countElem.textContent = result.openPacksClickCount ?? 0
     })
 
-    toggle.addEventListener('change', () => {
-        const enabled = toggle.checked
+    storage.local.get(['muteTabsEnabled'], (result) => {
+        toggleMuteTabs.checked = result.muteTabsEnabled ?? true
+    })
+
+    toggleMuteTabs.addEventListener('change', () => {
+        const enabled = toggleMuteTabs.checked
+        storage.local.set({ muteTabsEnabled: enabled })
+    })
+
+    toggleOpenPacks.addEventListener('change', () => {
+        const enabled = toggleOpenPacks.checked
         storage.local.set({ openPacksEnabled: enabled })
-        toggleClickerInActiveTab(enabled)
+        sendOpenPacksClickedMessage(enabled)
     })
 
     setInterval(() => {
@@ -22,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000)
 })
 
-function toggleClickerInActiveTab(enabled) {
+function sendOpenPacksClickedMessage(enabled) {
     console.warn('autoklicker funktion augferufne')
     browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length === 0) return
@@ -36,19 +46,12 @@ function toggleClickerInActiveTab(enabled) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const balanceDisplay = document.getElementById('balanceDisplay')
-    // const checkbox = document.getElementById('autoclickerToggle')
-    // const clickCountElem = document.getElementById('clickCount')
-
     initBalanceUpdater(balanceDisplay)
-    // initAutoclickerToggle(checkbox)
-    // initClickCounterDisplay(clickCountElem)
 })
-/**
- * Initialisiert das regelmäßige Abrufen des Kontostands.
- */
+
 function initBalanceUpdater(displayElem) {
-    fetchBalance(displayElem) // initialer Abruf
-    setInterval(() => fetchBalance(displayElem), 1000) // alle 1 Sekunde
+    fetchBalance(displayElem)
+    setInterval(() => fetchBalance(displayElem), 1000)
 }
 
 function fetchBalance(displayElem) {
