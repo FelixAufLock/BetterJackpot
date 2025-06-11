@@ -10,6 +10,7 @@ function matchOpenPacksButton(btn) {
 }
 
 export const openPacksClicker = new BaseClicker({
-    key: 'openPacksClickCount',
+    counterItemName: 'openPacksClickCount',
+    settingItemName: 'openPacksEnabled',
     buttonMatchFn: matchOpenPacksButton,
 })

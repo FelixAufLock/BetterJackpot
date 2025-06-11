@@ -1,24 +1,19 @@
 {
     "name": "betterjackpot",
+    "private": true,
     "version": "1.0.0",
-    "description": "Verbessere deine Jackpot.de-Erfahrung mit Autoklicker und so",
-    "main": "content.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "dev": "wxt",
+        "dev:firefox": "wxt -b firefox",
+        "build": "wxt build -b chrome && wxt build -b firefox --mv3",
+        "build:firefox": "wxt build -b firefox",
+        "zip": "wxt zip",
+        "zip:firefox": "wxt zip -b firefox",
+        "postinstall": "wxt prepare"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/FelixAufLock/BetterJackpot.git"
-    },
-    "keywords": [],
-    "author": "",
     "license": "ISC",
-    "type": "commonjs",
-    "bugs": {
-        "url": "https://github.com/FelixAufLock/BetterJackpot/issues"
-    },
-    "homepage": "https://github.com/FelixAufLock/BetterJackpot#readme",
+    "type": "module",
     "devDependencies": {
-        "vite": "^6.3.5"
+        "wxt": "^0.20.7"
     }
 }

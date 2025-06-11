@@ -1,10 +1,24 @@
 export class BaseClicker {
-    constructor({ key, buttonMatchFn }) {
-        this.key = key
+    constructor({ counterItemName, settingItemName, buttonMatchFn }) {
+        this.counterItemName = counterItemName
+        this.settingItemName = settingItemName
         this.buttonMatchFn = buttonMatchFn
         this.observer = null
+        this.init()
     }
 
+    async init() {
+        const shouldStart = await this.shouldStart()
+        if (shouldStart) this.start()
+    }
+
+    async shouldStart() {
+        const result = await browser.runtime.sendMessage({
+            type: 'GET_SETTING',
+            key: this.settingItemName,
+        })
+        return result === true
+    }
     start() {
         if (this.observer) return
 
@@ -47,9 +61,9 @@ export class BaseClicker {
     }
 
     incrementCounter() {
-        browser.storage.local.get([this.key], (result) => {
-            const count = result[this.key] ?? 0
-            browser.storage.local.set({ [this.key]: count + 1 })
+        browser.runtime.sendMessage({
+            type: 'INCREMENT_COUNTER',
+            counterItemName: this.counterItemName,
         })
     }
 }

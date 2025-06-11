@@ -1,6 +1,6 @@
-*web-ext-artifacts
+web-ext-artifacts/
 .amo-upload-uuid
 .DS_Store
-*node_modules
-package-lock.json
+node_modules/
 dist/
+.wxt/

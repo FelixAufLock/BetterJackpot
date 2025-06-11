@@ -1,38 +1,35 @@
 # 🎰 BetterJackpot 
 
-Verbessere deine Jackpot.de-Erfahrung mit Autoklicker und so 
+Verbessere deine jackpot.de-Erfahrung mit Autoklicker und so 
 
 ## 🚀 Funktionen
 
 - 🖥️ Anzeige des Kontostandes 💰 (schon geil)
-- 🚨 Sticker-Päckchen werden automatisch geöffnet  (sehr geil)
-- 🤫 jackpot.de Tabs ist immer stumm 🔇 (kein Stress)
+- 🚨 Sticker-Päckchen werden automatisch geöffnet (sehr geil)
+- 🔇 jackpot.de-Tabs sind immer stumm 🤫 (ganz entspannt)
+
+## ⚙️ Setup
+
+Entwickelt mit [WXT](https://wxt.dev/) 
+[WXT Docs](https://wxt.dev/guide/essentials/project-structure.html)
+
+WXT installieren
+`npm install wxt --save-dev`
+
+Um für beide Versionen zu bauen
+`npm run build`
+
+Jeder Build erzeugt einen `dist` Ordner, der die fertigen Erweiterungen `chrome-mv3` und `firefox-mv3` enthält
 
 ## 🧑‍💻 Installation
 
 - Firefox: 
     - temporär: 
-        - 'npx vite build' 
-        - 'about:debugging#/runtime/this-firefox'
-        - "Temporäres Add-On laden..."
-        - dist/manifest.json
+        - `about:debugging#/runtime/this-firefox` aufrufen
+        - "Temporäres Add-On laden...": `dist/firefox-mv3/manifest.json`
     - signiert: t.b.d.
 - Chrome:
-    - t.b.d.
+    - `chrome://extensions/` aufrufen
+    - "Entpackte Erweiterung laden": `dist/chrome-mv3`
 
-## Entwicklung
 
-Wir nutzen Vite https://vite.dev/, um mehrere content scripts benutzen zu können.
-🚨🚨🚨 Daher nach jeder Änderung neu bauen, bevor die Erweiterung installiert wird.
-
-- Setup 
-    - hier im BetterJackpot-Ordner 'npm init -y' und dann 'npm install --save-dev vite'
-- Ablauf
-    - hier im Ordner bauen mit 'npx vite build'
-    - dann Erweiterung dist/manifest.json installieren
-
-## 🧱 Projektstruktur
-
-- `src/` – Quellcode der Erweiterung
-- `public/` – Manifest und Icons
-- `vite.config.js` – Vite-Build-Konfiguration

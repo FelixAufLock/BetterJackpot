@@ -1,7 +1,15 @@
-import './install.js'
+import './incrementCounter.js'
+import './getSetting.js'
 import { initMuteTabs } from './muteTabs.js'
 
-initMuteTabs()
+export default defineBackground(() => {
+    // TODO: check if required in chrome, in firefox its not
+    browser.runtime.onInstalled.addListener(() => {
+        console.warn('Service Worker gestartet')
+    })
+
+    initMuteTabs()
+})
 
 // not used, just prepared
 function updateBadge(tabId, showBadge) {
